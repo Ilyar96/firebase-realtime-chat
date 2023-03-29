@@ -1,8 +1,15 @@
 import { signOut } from "firebase/auth";
 import React from "react";
+import { useContext } from "react";
 import { auth } from "../firebase";
+import { AuthContext } from "../context/AuthContext";
+import emptyAvatar from "../img/empty-avatar.png";
 
 export const Navbar = () => {
+	const { currentUser } = useContext(AuthContext);
+	console.log("currentUser: ", currentUser);
+	const avatar = currentUser.photoURL ? currentUser.photoURL : emptyAvatar;
+
 	const logout = () => {
 		signOut(auth);
 	};
@@ -11,8 +18,8 @@ export const Navbar = () => {
 		<div className="navbar">
 			<span className="logo">Chat</span>
 			<div className="user">
-				<img src="http://iljar96.ru/images/users/male_01.jpg" alt="" />
-				<span>displayName</span>
+				<img src={avatar} alt="" />
+				<span>{currentUser.displayName}</span>
 				<button onClick={logout}>logout</button>
 			</div>
 		</div>

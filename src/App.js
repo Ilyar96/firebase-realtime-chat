@@ -10,7 +10,6 @@ import { HOME_ROUTE, REGISTER_ROUTE, LOGIN_ROUTE } from "./utils/const";
 
 const App = () => {
 	const { currentUser } = useContext(AuthContext);
-	console.log(process.env.REACT_APP_NOT_SECRET_CODE);
 
 	const ProtectedRoute = ({ children }) => {
 		if (!currentUser) {

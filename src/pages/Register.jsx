@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { auth, storage, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { auth, storage, db } from "../firebase";
 import AddAvatar from "../img/addAvatar.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, HOME_ROUTE } from "../utils/const";
@@ -14,7 +14,7 @@ export const Register = () => {
 	const nameRef = useRef(null);
 	const navigate = useNavigate();
 	const { currentUser } = useContext(AuthContext);
-	console.log(process.env.REACT_APP_BASE_URL);
+
 	const setUserDataToDb = async (user, ...data) => {
 		await setDoc(doc(db, "users", user.uid), {
 			uid: user.uid,
@@ -31,11 +31,11 @@ export const Register = () => {
 		const file = e.target[3].files[0];
 
 		createUserWithEmailAndPassword(auth, email, password)
-			.then((res) => {
+			.then(async (res) => {
 				const user = res.user;
 
 				if (!file) {
-					setUserDataToDb(user, {
+					await setUserDataToDb(user, {
 						displayName,
 						email,
 						photoURL: null,

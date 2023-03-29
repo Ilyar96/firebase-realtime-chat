@@ -133,6 +133,7 @@
 
 				.user {
 					display: flex;
+					align-items: center;
 					gap: 10px;
 
 					img {
@@ -147,6 +148,8 @@
 						background-color: #5d5b8d;
 						color: #ddddf7;
 						font-size: 10px;
+						height: 24px;
+						line-height: 24px;
 						border: none;
 						cursor: pointer;
 						@include tablet {
@@ -172,6 +175,12 @@
 							color: lightgray;
 						}
 					}
+				}
+
+				.not-found {
+					display: block;
+					padding: 0 10px 10px;
+					color: #fff;
 				}
 			}
 
@@ -200,6 +209,7 @@
 						font-weight: 500;
 					}
 					p {
+						margin: 5px 0 0;
 						font-size: 14px;
 						color: lightgray;
 					}
