@@ -18,6 +18,11 @@
 	display: none;
 }
 
+button:disabled {
+	opacity: 0.5;
+	cursor: default !important;
+}
+
 .form-container {
 	background-color: #a7bcff;
 	height: 100vh;
@@ -71,15 +76,24 @@
 			}
 
 			label {
+				cursor: pointer;
+			}
+
+			.label {
 				display: flex;
 				align-items: center;
 				gap: 10px;
 				color: #8da4f1;
 				font-size: 12px;
-				cursor: pointer;
 
 				img {
 					width: 32px;
+				}
+
+				svg {
+					circle {
+						transition: stroke-dashoffset 0.3s ease;
+					}
 				}
 			}
 		}
