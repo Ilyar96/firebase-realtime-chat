@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { REGISTER_ROUTE, HOME_ROUTE } from "../utils/const";
 import { auth } from "../firebase";
-import { authErrorHandler } from "../utils/authErrorHandler";
+import { errorHandler } from "../utils/errorHandler";
 import { AuthContext } from "../context/AuthContext";
 
 export const Login = () => {
@@ -18,7 +18,7 @@ export const Login = () => {
 		const password = e.target[1].value;
 
 		signInWithEmailAndPassword(auth, email, password).catch((error) => {
-			authErrorHandler(error);
+			errorHandler(error);
 		});
 		navigate(HOME_ROUTE, { replace: true });
 	};

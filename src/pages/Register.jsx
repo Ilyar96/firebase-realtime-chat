@@ -5,8 +5,13 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, storage, db } from "../firebase";
 import AddAvatar from "../img/addAvatar.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, HOME_ROUTE } from "../utils/const";
-import { authErrorHandler } from "../utils/authErrorHandler";
+import {
+	LOGIN_ROUTE,
+	HOME_ROUTE,
+	USERS_COLLECTION_PATH,
+	USER_CHATS_COLLECTION_PATH,
+} from "../utils/const";
+import { errorHandler } from "../utils/errorHandler";
 import { AuthContext } from "../context/AuthContext";
 
 const circleRad = 12;
@@ -27,11 +32,11 @@ export const Register = () => {
 	const { currentUser } = useContext(AuthContext);
 
 	const setUserDataToDb = async (user, ...data) => {
-		await setDoc(doc(db, "users", user.uid), {
+		await setDoc(doc(db, USERS_COLLECTION_PATH, user.uid), {
 			uid: user.uid,
 			...data,
 		});
-		await setDoc(doc(db, "userChats", user.uid), {});
+		await setDoc(doc(db, USER_CHATS_COLLECTION_PATH, user.uid), {});
 	};
 
 	const handleSubmit = async (e) => {
@@ -54,7 +59,7 @@ export const Register = () => {
 				email,
 				password
 			).catch((error) => {
-				authErrorHandler(error);
+				errorHandler(error);
 			});
 
 			if (!file) {
@@ -82,7 +87,7 @@ export const Register = () => {
 					);
 				},
 				(error) => {
-					authErrorHandler(error);
+					errorHandler(error);
 				},
 				() => {
 					getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -102,14 +107,14 @@ export const Register = () => {
 
 							navigate(HOME_ROUTE, { replace: true });
 						} catch (error) {
-							authErrorHandler(error);
+							errorHandler(error);
 							setIsLoading(false);
 						}
 					});
 				}
 			);
 		} catch (error) {
-			authErrorHandler(error);
+			errorHandler(error);
 			setIsLoading(false);
 		}
 	};
