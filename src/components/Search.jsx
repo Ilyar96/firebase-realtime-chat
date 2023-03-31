@@ -17,15 +17,19 @@ import {
 	USERS_COLLECTION_PATH,
 	CHATS_COLLECTION_PATH,
 	USER_CHATS_COLLECTION_PATH,
+	CHAT_MESSAGES_PATH,
 } from "../utils/const";
 import { AuthContext } from "../context/AuthContext";
 import { getUserVisibleData } from "../utils/getUserVisibleData";
+import { getCombinedId } from "../utils/getCombinedId";
+import { ChatContext, doChangeUser } from "../context/ChatContext";
 
 export const Search = () => {
 	const [searchValue, setSearchValue] = useState("");
 	const [userList, setUserList] = useState([]);
 	const [err, setErr] = useState(null);
 	const { currentUser } = useContext(AuthContext);
+	const { chatData, dispatch } = useContext(ChatContext);
 
 	const onChange = (e) => {
 		setSearchValue(e.target.value);
@@ -65,10 +69,7 @@ export const Search = () => {
 
 	const handleSelect = async (user) => {
 		//check whether the group (chats in firestore) exists, if not create
-		const combinedId =
-			currentUser.uid > user.uid
-				? currentUser.uid + user.uid
-				: currentUser.uid + user.uid;
+		const combinedId = getCombinedId(currentUser.uid, user.uid);
 
 		try {
 			const res = await getDoc(doc(db, CHATS_COLLECTION_PATH, combinedId));
@@ -77,7 +78,7 @@ export const Search = () => {
 				//create chat in chats collection
 				const chatRef = doc(db, CHATS_COLLECTION_PATH, combinedId);
 				await setDoc(chatRef, {
-					messages: [],
+					[CHAT_MESSAGES_PATH]: [],
 				});
 
 				//update currentUser chats
@@ -111,6 +112,11 @@ export const Search = () => {
 	// eslint-disable-next-line
 	const debouncedSelect = useCallback(debounce(handleSelect, 300), []);
 
+	const handleClick = (user) => {
+		debouncedSelect(user);
+		chatData.user?.uid !== user.uid && dispatch(doChangeUser(user));
+	};
+
 	useEffect(() => {
 		debouncedSearch(searchValue);
 		// eslint-disable-next-line
@@ -121,7 +127,7 @@ export const Search = () => {
 			<div className="search-form">
 				<input
 					type="text"
-					placeholder="Find a user"
+					placeholder="Find user"
 					value={searchValue}
 					onChange={onChange}
 				/>
@@ -132,7 +138,7 @@ export const Search = () => {
 					<ChatItem
 						key={user.uid}
 						data={getUserVisibleData(user)}
-						onClick={() => debouncedSelect(user)}
+						onClick={() => handleClick(user)}
 						withoutText
 						tabIndex={0}
 					/>

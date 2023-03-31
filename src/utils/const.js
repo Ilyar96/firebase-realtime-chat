@@ -7,3 +7,4 @@ export const REGISTER_ROUTE = "/register";
 export const USERS_COLLECTION_PATH = "users";
 export const USER_CHATS_COLLECTION_PATH = "userChats";
 export const CHATS_COLLECTION_PATH = "chats";
+export const CHAT_MESSAGES_PATH = "messages";

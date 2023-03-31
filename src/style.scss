@@ -231,6 +231,8 @@ button:disabled {
 			}
 		}
 		.chat {
+			display: flex;
+			flex-direction: column;
 			flex: 2;
 
 			.chat-info {
@@ -254,10 +256,17 @@ button:disabled {
 			}
 
 			.messages {
+				flex: 1 1;
 				background-color: #ddddf7;
 				padding: 10px;
 				height: calc(100% - 160px);
-				overflow: scroll;
+				overflow-y: scroll;
+
+				&.empty {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
 
 				.message {
 					display: flex;
@@ -284,6 +293,7 @@ button:disabled {
 						gap: 10px;
 
 						p {
+							margin: 0;
 							background-color: white;
 							padding: 10px 20px;
 							border-radius: 0px 10px 10px 10px;
@@ -293,6 +303,11 @@ button:disabled {
 						img {
 							width: 50%;
 						}
+					}
+					.date {
+						display: inline-block;
+						font-size: 13px;
+						color: #8b7f7f;
 					}
 
 					&.owner {

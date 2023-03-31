@@ -1,19 +1,37 @@
-import React from "react";
+import React, { forwardRef, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
+import emptyAvatar from "../img/empty-avatar.png";
+import { getRelativeTimeString } from "../utils/getPassedTime";
 
-export const Message = ({ message }) => {
+export const Message = forwardRef(({ message }, ref) => {
+	const { currentUser } = useContext(AuthContext);
+	const { chatData } = useContext(ChatContext);
+	const image =
+		chatData.user.uid === Message.senderId
+			? chatData.user.photoURL
+			: currentUser.photoURL;
+
 	return (
 		<div
-			className={`message`}
-			// className={`message ${message.senderId === currentUser.uid && "owner"}`}
+			className={`message ${
+				message.senderID === currentUser.uid ? "owner" : ""
+			}`}
+			ref={ref}
 		>
 			<div className="message-info">
-				<img src="http://iljar96.ru/images/users/male_01.jpg" alt="" />
-				<span>just now</span>
+				<img
+					src={image ? image : emptyAvatar}
+					alt={chatData.user?.displayName}
+				/>
 			</div>
 			<div className="message-content">
-				<p>{message.text}</p>
+				{message.text && <p>{message.text}</p>}
 				{message.img && <img src={message.img} alt="" />}
+				<span className="date">
+					{getRelativeTimeString(message.date.seconds * 1000, "en")}
+				</span>
 			</div>
 		</div>
 	);
-};
+});

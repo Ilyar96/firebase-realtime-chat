@@ -7,7 +7,6 @@ import emptyAvatar from "../img/empty-avatar.png";
 
 export const Navbar = () => {
 	const { currentUser } = useContext(AuthContext);
-	console.log("currentUser: ", currentUser);
 	const avatar = currentUser.photoURL ? currentUser.photoURL : emptyAvatar;
 
 	const logout = () => {

@@ -32,6 +32,7 @@ export const Register = () => {
 	const { currentUser } = useContext(AuthContext);
 
 	const setUserDataToDb = async (user, ...data) => {
+		console.log("data: ", data);
 		await setDoc(doc(db, USERS_COLLECTION_PATH, user.uid), {
 			uid: user.uid,
 			...data,
@@ -47,6 +48,7 @@ export const Register = () => {
 		}
 
 		const displayName = e.target[0].value;
+		console.log("displayName: ", displayName);
 		const email = e.target[1].value;
 		const password = e.target[2].value;
 		const file = e.target[3].files[0];
@@ -68,6 +70,11 @@ export const Register = () => {
 					email,
 					photoURL: null,
 				});
+
+				await updateProfile(user, {
+					displayName,
+				});
+
 				navigate(HOME_ROUTE, { replace: true });
 				return;
 			}
