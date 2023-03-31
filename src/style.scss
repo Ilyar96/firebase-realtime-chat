@@ -125,6 +125,8 @@ button:disabled {
 		}
 
 		.sidebar {
+			display: flex;
+			flex-direction: column;
 			flex: 1;
 			background-color: #3e3c61;
 			position: relative;
@@ -198,6 +200,11 @@ button:disabled {
 				}
 			}
 
+			.chats {
+				flex: 1 1;
+				overflow-y: auto;
+			}
+
 			.user-chat {
 				padding: 10px;
 				display: flex;
@@ -227,6 +234,11 @@ button:disabled {
 						font-size: 14px;
 						color: lightgray;
 					}
+				}
+
+				.chat-date {
+					margin-left: auto;
+					padding-left: 10px;
 				}
 			}
 		}

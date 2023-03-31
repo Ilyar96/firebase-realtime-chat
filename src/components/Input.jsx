@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
 	arrayUnion,
 	doc,
@@ -24,6 +24,7 @@ export const Input = () => {
 	const [img, setImg] = useState();
 	const { chatData } = useContext(ChatContext);
 	const { currentUser } = useContext(AuthContext);
+	const inputRef = useRef(null);
 
 	const onChange = (e) => {
 		console.log(e.target.name);
@@ -87,6 +88,7 @@ export const Input = () => {
 				currentUser.uid
 			);
 			await updateDoc(currentUserChatsRef, {
+				[`${chatData.chatID}.text`]: text,
 				[`${chatData.chatID}.date`]: serverTimestamp(),
 			});
 
@@ -97,6 +99,7 @@ export const Input = () => {
 				chatData.user.uid
 			);
 			await updateDoc(userChatsRef, {
+				[`${chatData.chatID}.text`]: text,
 				[`${chatData.chatID}.date`]: serverTimestamp(),
 			});
 
@@ -114,6 +117,10 @@ export const Input = () => {
 		}
 	};
 
+	useEffect(() => {
+		inputRef.current?.focus();
+	}, [chatData.chatID]);
+
 	return (
 		<div className="input">
 			<input
@@ -123,6 +130,7 @@ export const Input = () => {
 				value={text}
 				onChange={onChange}
 				onKeyDown={handleKeyDown}
+				ref={inputRef}
 			/>
 			<div className="send">
 				<input onChange={onChange} type="file" name="img" hidden id="img" />

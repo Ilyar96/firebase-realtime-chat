@@ -2,7 +2,7 @@ import React, { forwardRef, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import emptyAvatar from "../img/empty-avatar.png";
-import { getRelativeTimeString } from "../utils/getPassedTime";
+import { getRelativeTimeString } from "../utils/getRelativeTimeString";
 
 export const Message = forwardRef(({ message }, ref) => {
 	const { currentUser } = useContext(AuthContext);

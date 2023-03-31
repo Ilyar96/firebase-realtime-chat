@@ -5,11 +5,13 @@ import { USER_CHATS_COLLECTION_PATH } from "../utils/const";
 import { doc, onSnapshot } from "firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext, doChangeUser } from "../context/ChatContext";
+import { getRelativeTimeString } from "../utils/getRelativeTimeString";
 
 export const Chats = () => {
 	const [chatList, setChatList] = useState([]);
 	const { currentUser } = useContext(AuthContext);
 	const { chatData, dispatch } = useContext(ChatContext);
+	console.log("chatList: ", chatList);
 
 	const getChats = async () => {
 		try {
@@ -50,20 +52,28 @@ export const Chats = () => {
 		chatData.user?.uid !== user.uid && dispatch(doChangeUser(user));
 	};
 
+	const handleKeyDown = (e, user) => {
+		if (e.code === "Enter") {
+			handleClick(user);
+		}
+	};
+
 	useEffect(() => {
 		currentUser && getChats();
 		// eslint-disable-next-line
 	}, [currentUser]);
 
-	const chatListLayout = chatList.map(({ id, userInfo, date }) => (
+	const chatListLayout = chatList.map(({ id, userInfo, text = "", date }) => (
 		<ChatItem
 			key={id}
 			tabIndex={0}
+			date={date ? getRelativeTimeString(date.seconds * 1000, "en") : null}
 			data={{
-				text: "message",
+				text,
 				...userInfo,
 			}}
 			onClick={() => handleClick(userInfo)}
+			onKeyDown={(e) => handleKeyDown(e, userInfo)}
 		/>
 	));
 
